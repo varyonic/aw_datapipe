@@ -57,7 +57,7 @@ module AwDatapipe
 
       klass = AwDatapipe.const_defined?(type, false) ?
         AwDatapipe.const_get(type, false) :
-        AwDatapipe.const_set(type, PipelineObject.new(*attributes.keys.sort))
+        AwDatapipe.const_set(type, PipelineObject.new(*(attributes.keys - [:id, :name])))
 
       klass.new(*attributes.sort.map(&:last)) # pass values sorted by keys
     end

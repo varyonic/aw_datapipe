@@ -43,7 +43,7 @@ bundle exec ruby tmp/pipeline-definition.rb
 ```
 ## Development
 
-A live AWS account with a sample pipeline is required to run the tests.
+A live AWS account with a sample pipeline is required to run the remote tests.
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 

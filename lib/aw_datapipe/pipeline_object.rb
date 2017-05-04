@@ -5,9 +5,11 @@ module AwDatapipe
     attr_accessor :pipeline
 
     def self.build(params)
-      new.tap do |struct|
-        params.each_pair { |k, v| struct.send "#{k}=", v }
-      end
+      new(params)
+    end
+
+    def initialize(params)
+      params.each_pair { |k, v| send "#{k}=", v }
     end
 
     # Iterates through struct members, recursively collecting any PipelineObjects.

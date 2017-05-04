@@ -59,7 +59,7 @@ module AwDatapipe
         AwDatapipe.const_get(type, false) :
         AwDatapipe.const_set(type, PipelineObject.new(*(attributes.keys - [:id, :name])))
 
-      klass.new(*attributes.sort.map(&:last)) # pass values sorted by keys
+      klass.new(attributes)
     end
 
     def fields_to_hash(fields)

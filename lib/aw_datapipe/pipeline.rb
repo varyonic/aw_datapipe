@@ -15,7 +15,8 @@ module AwDatapipe
     end
 
     def self.build(config, activities, parameter_metadata, parameter_values)
-      new([], parameter_metadata, parameter_values).tap { |p| p.objects.append_with_dependents(config, *activities) }
+      objects = [config, *activities].map { |obj| obj.dependencies.append(obj) }.flatten
+      new(objects, parameter_metadata, parameter_values)
     end
 
     def configuration

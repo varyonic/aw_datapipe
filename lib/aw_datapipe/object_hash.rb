@@ -13,13 +13,5 @@ module AwDatapipe
       self
     end
     alias_method :<<, :append
-
-    def append_with_dependents(*objects)
-      objects.each do |object|
-        object.dependencies.each { |dep| self.append dep }
-        self.append object
-      end
-      self
-    end
   end
 end

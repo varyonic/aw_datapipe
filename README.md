@@ -1,4 +1,6 @@
 # AW Datapipe
+[![Gem Version](https://badge.fury.io/rb/aw_datapipe.png)](https://badge.fury.io/rb/aw_datapipe)
+[![Build Status](https://travis-ci.org/varyonic/aw_datapipe.png?branch=master)](https://travis-ci.org/varyonic/aw_datapipe)
 
 AW Datapipe is an unofficial domain specific ruby wrapper for the 
 [AWS SDK](http://www.rubydoc.info/github/aws/aws-sdk-ruby) Data Pipeline API.
@@ -30,8 +32,9 @@ Configure credentials for AWS SDK.
 export AWS_ACCESS_KEY_ID=AKIA****************
 export AWS_SECRET_ACCESS_KEY=********************************
 ```
-Use bin/console to download a pipeline definition as ruby instead of JSON.
+Use a ruby console (e.g. irb) to download a pipeline definition as ruby instead of JSON.
 ```ruby
+require 'aw_datapipe'
 pipelines = AwDatapipe::Session.new
 pipelines.download_definition 'df-***************', 'tmp/pipeline-definition.rb'
 ```
@@ -52,7 +55,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/varyonic/aw_datapipe.
-
 
 ## License
 

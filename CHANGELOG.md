@@ -9,7 +9,7 @@
 - Rubydocs.
 - AWS labs examples converted to DSL.
 
-## 0.2.0
+## 0.2.0 - 2017-05-06
 - [FIX] Handle array values, e.g. 'securityGroups' => ['group1', 'group2']
 - Separate SourceWriter class.
 - Simplify build vs. new.

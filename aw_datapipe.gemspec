@@ -12,7 +12,6 @@ Gem::Specification.new do |spec|
   spec.summary       = "Unofficial ruby wrapper for the AWS SDK Data Pipeline API."
   spec.description   = "Unofficial domain specific ruby wrapper for the AWS SDK Data Pipeline API."
   spec.homepage      = "http://github.com/varyonic/aw_datapipe"
-  spec.date          = "2017-05-02"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|

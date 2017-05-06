@@ -7,6 +7,13 @@ describe AwDatapipe::PipelineObject do
   let(:s3_path) { AwDatapipe::S3DataNode.build(id: :s3_path, name: 'S3', directory_path: '/tmp') }
   let(:sql_query) { AwDatapipe::SqlDataNode.build(id: :sql_query, database: database, table: 'Y', select_query: '*') }
 
+  describe '#initialize' do
+    it 'defaults id based on name' do
+      ec2 = AwDatapipe::Ec2Resource.build(name: 'Ec2Instance')
+      assert ec2.id == :ec2_instance, "id = #{ec2.id}"
+    end
+  end
+
   describe '#dependencies' do
     it 'tracks recursive dependencies' do
       dependency_ids = activity.dependencies.map(&:id)

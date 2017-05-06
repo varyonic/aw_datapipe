@@ -1,6 +1,6 @@
 module AwDatapipe
   class PipelineObject < Struct
-    attr_accessor :id
+    attr_reader :id
     attr_accessor :name
     attr_accessor :pipeline
 
@@ -9,6 +9,8 @@ module AwDatapipe
     end
 
     def initialize(params)
+      @id = params.delete(:id) || params[:name].underscore.to_sym ||
+        raise(ArgumentError, ":id or :name required: #{params.inspect}")
       params.each_pair { |k, v| send "#{k}=", v }
     end
 

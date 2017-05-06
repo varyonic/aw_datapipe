@@ -64,16 +64,26 @@ module AwDatapipe
 
     def fields_to_hash(fields)
       fields.each_with_object({}) do |field, hash|
-        hash[symbolize field.key] = field.string_value || field.ref_value.underscore.to_sym
+        if hash[symbolize field.key]
+          hash[symbolize field.key] = Array(hash[symbolize field.key]) << field.string_value
+        else
+          hash[symbolize field.key] = field.string_value || field.ref_value.underscore.to_sym
+        end
       end
     end
 
     def hash_to_fields(hash)
-      hash.keys.map do |key|
-        PipelineObject === hash[key] ?
-          { key: camelize(key, :lower), ref_value: camelize(hash[key].id) } :
-          { key: camelize(key, :lower), string_value: hash[key] }
-      end
+      hash.each_pair.map do |key, value|
+        camelized_key = camelize(key, :lower)
+        case value
+        when PipelineObject
+          { key: camelized_key, ref_value: camelize(value.id) }
+        when Array
+          value.map { |v| Hash[key: camelized_key, string_value: v] }
+        else
+          { key: camelized_key, string_value: value }
+        end
+      end.flatten
     end
 
     # Convert string to a rubyish variable name.
@@ -110,14 +120,22 @@ module AwDatapipe
     def marshal_parameter_values(parameter_values)
       out = []
       parameter_values.each_pair do |id, value|
-        out << { id: id, string_value: value }
+        if value.respond_to?(:each)
+          value.each { |v| out << { id: id, string_value: v } }
+        else
+          out << { id: id, string_value: value }
+        end
       end
       out
     end
 
-        hash[value.id] = value.string_value
     def unmarshal_parameter_values(parameter_values)
       parameter_values.each_with_object({}) do |value, hash|
+        if hash[value.id]
+          hash[value.id] = Array(hash[value.id]) << value.string_value
+        else
+          hash[value.id] = value.string_value
+        end
       end
     end
   end

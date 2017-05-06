@@ -12,9 +12,9 @@ module AwDatapipe
 
     def unmarshal(aws_definition)
       # pipeline.aws_definition = aws_definition # for troubleshooting
-      objects = unmarshal_pipeline_objects(aws_definition)
-      parameter_metadata = unmarshal_parameter_objects(aws_definition)
-      parameter_values = unmarshal_parameter_values(aws_definition)
+      objects = unmarshal_pipeline_objects(aws_definition.pipeline_objects)
+      parameter_metadata = unmarshal_parameter_objects(aws_definition.parameter_objects)
+      parameter_values = unmarshal_parameter_values(aws_definition.parameter_values)
 
       Pipeline.new(objects, parameter_metadata, parameter_values)
     end
@@ -43,8 +43,8 @@ module AwDatapipe
     end
 
     # @return Array PipelineObject subclass instance.
-    def unmarshal_pipeline_objects(aws_definition)
-      aws_definition.pipeline_objects.map do |aws_struct|
+    def unmarshal_pipeline_objects(pipeline_objects)
+      pipeline_objects.map do |aws_struct|
         unmarshal_pipeline_object(aws_struct)
       end
     end
@@ -98,8 +98,8 @@ module AwDatapipe
       { id: key, attributes: out }
     end
 
-    def unmarshal_parameter_objects(aws_definition)
-      aws_definition.parameter_objects.each_with_object({}) do |object, hash|
+    def unmarshal_parameter_objects(parameter_objects)
+      parameter_objects.each_with_object({}) do |object, hash|
         klass = ParameterMetadata.new(*object.attributes.map(&:key).map(&:to_sym))
         hash[object.id] = object.attributes.each_with_object(klass.new) do |attribute, struct|
           struct.send "#{attribute.key}=", attribute.string_value
@@ -115,9 +115,9 @@ module AwDatapipe
       out
     end
 
-    def unmarshal_parameter_values(aws_definition)
-      aws_definition.parameter_values.each_with_object({}) do |value, hash|
         hash[value.id] = value.string_value
+    def unmarshal_parameter_values(parameter_values)
+      parameter_values.each_with_object({}) do |value, hash|
       end
     end
   end

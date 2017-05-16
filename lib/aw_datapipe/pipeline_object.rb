@@ -61,6 +61,7 @@ module AwDatapipe
 
   Ec2Resource = PipelineObject.new(:action_on_task_failure, :instance_type, :security_group_ids, :subnet_id, :terminate_after)
   S3DataNode = PipelineObject.new(:directory_path, :file_path)
+  ShellCommandActivity = PipelineObject.new(:command, :input, :output, :stage, :runs_on)
 
   JdbcDatabase = PipelineObject.new(:_password, :connection_string, :jdbc_driver_class, :username)
   SqlDataNode = PipelineObject.new(:database, :select_query, :table)

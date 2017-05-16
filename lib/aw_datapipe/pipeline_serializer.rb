@@ -80,10 +80,11 @@ module AwDatapipe
           { key: camelized_key, ref_value: camelize(value.id) }
         when Array
           value.map { |v| Hash[key: camelized_key, string_value: v] }
+        when NilClass
         else
           { key: camelized_key, string_value: value }
         end
-      end.flatten
+      end.flatten.compact
     end
 
     # Convert string to a rubyish variable name.

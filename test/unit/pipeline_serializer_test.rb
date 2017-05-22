@@ -19,7 +19,8 @@ describe AwDatapipe::PipelineSerializer do
     it 'returns an AWS definition' do
       aws_definition = subject.marshal(pipeline)
       assert aws_definition.keys == %i(pipeline_id pipeline_objects parameter_objects parameter_values)
-      assert aws_definition[:pipeline_objects][3][:fields].select { |f| f[:key] == 'securityGroupIds' }.size == 2
+      ec2_object = aws_definition[:pipeline_objects].find { |obj| obj[:id] == 'RunHost' }
+      assert ec2_object[:fields].select { |f| f[:key] == 'securityGroupIds' }.size == 2
     end
   end
 

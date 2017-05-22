@@ -6,7 +6,8 @@ describe AwDatapipe::PipelineSerializer do
   let(:activity) { AwDatapipe::CopyActivity.build(id: :activity, input: sql_query, output: s3_path, runs_on: run_host) }
   let(:database) { AwDatapipe::JdbcDatabase.build(id: :database) }
   let(:run_host) { AwDatapipe::Ec2Resource.build(id: :run_host, security_group_ids: ['group1', 'group2']) }
-  let(:s3_path) { AwDatapipe::S3DataNode.build(id: :s3_path, name: 'S3', directory_path: '/tmp') }
+  let(:data_format) { AwDatapipe::CsvDataFormat.build(id: SecureRandom.uuid, column: [:id, :name]) }
+  let(:s3_path) { AwDatapipe::S3DataNode.build(id: :s3_path, name: 'S3', data_format: data_format, directory_path: '/tmp') }
   let(:sql_query) { AwDatapipe::SqlDataNode.build(id: :sql_query, database: database, table: 'Y', select_query: '*') }
 
   let(:parameter_metadata) { Hash[] }

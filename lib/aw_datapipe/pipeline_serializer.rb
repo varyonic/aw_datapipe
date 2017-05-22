@@ -33,7 +33,7 @@ module AwDatapipe
     end
 
     def marshal_pipeline_object(pipeline_object)
-      type = pipeline_object.demodulized_class_name
+      type = pipeline_object.type
       hash = pipeline_object.to_hash
       id = hash.delete(:id)
       name = hash.delete(:name)

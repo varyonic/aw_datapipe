@@ -24,12 +24,8 @@ module AwDatapipe
       end.flatten
     end
 
-    def demodulized_class_name
-      self.class.name.split('::').last
-    end
-
     def inspect
-      "#<#{demodulized_class_name} #{to_hash}>"
+      "#<#{type} #{to_hash}>"
     end
 
     def to_hash
@@ -40,6 +36,10 @@ module AwDatapipe
       "#{self.class.name}.build(" << [:id, :name, *members].map do |member|
         "\n" << indent(indent_level) << member_source(member)
       end.join(",") << ")"
+    end
+
+    def type
+      self.class.name.split('::').last
     end
 
     protected

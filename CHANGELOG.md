@@ -12,6 +12,9 @@
 - Rubydocs.
 - AWS labs examples converted to DSL.
 
+## 0.2.2 - 2017-05-24
+- Add CsvDataFormat.
+
 ## 0.2.1 - 2017-05-16
 - Allow either S3 directory\_path or file\_path.
 - Add ShellCommandActivity.

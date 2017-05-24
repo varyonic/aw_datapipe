@@ -29,7 +29,7 @@ module AwDatapipe
     end
 
     def to_hash
-      Hash[each_pair.to_a].merge(id: id, name: name)
+      Hash[each_pair.select { |k, v| v != nil }].merge(id: id, name: name)
     end
 
     def source(indent_level = 1)

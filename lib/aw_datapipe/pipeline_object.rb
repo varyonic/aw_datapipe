@@ -66,7 +66,7 @@ module AwDatapipe
       'CSV'
     end
   end
-  ShellCommandActivity = PipelineObject.new(:command, :input, :output, :stage, :runs_on)
+  ShellCommandActivity = PipelineObject.new(:input, :output, :runs_on, :command, :script_argument, :script_uri, :stage)
 
   JdbcDatabase = PipelineObject.new(:_password, :connection_string, :jdbc_driver_class, :username)
   SqlDataNode = PipelineObject.new(:database, :select_query, :table)

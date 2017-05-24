@@ -12,6 +12,9 @@
 - Rubydocs.
 - AWS labs examples converted to DSL.
 
+## 0.2.4 - 2017-05-24
+- Add ShellCommandActivity optional parameters.
+
 ## 0.2.3 - 2017-05-24
 - Don’t include unpopulated optional fields when converting PipelineObject#to_hash.
 

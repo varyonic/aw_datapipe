@@ -21,6 +21,7 @@ module AwDatapipe
       end
     end
 
+    # @return [PipelineObject] appended object
     def append_object(object)
       object.pipeline = self
       objects[object.id] = object
@@ -30,6 +31,7 @@ module AwDatapipe
       [*object.dependencies, object].each(&method(:append_object))
     end
 
+    # @return [Pipeline] self
     def append_objects_with_dependencies(objects)
       objects.each(&method(:append_object_with_dependencies))
       self
@@ -37,6 +39,22 @@ module AwDatapipe
 
     def configuration
       objects.fetch(:default)
+    end
+
+    def csv_data_format(params)
+      append_object CsvDataFormat.build(params)
+    end
+
+    def ec2_resource(params)
+      append_object Ec2Resource.build(params)
+    end
+
+    def jdbc_database(params)
+      append_object JdbcDatabase.build(params)
+    end
+
+    def s3_data_node(params)
+      append_object S3DataNode.build(params)
     end
 
     def referenced_object_ids

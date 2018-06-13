@@ -59,7 +59,16 @@ module AwDatapipe
   Configuration = PipelineObject.new(:failure_and_rerun_mode, :pipeline_log_uri, :resource_role, :role, :schedule, :schedule_type)
   Schedule = PipelineObject.new(:period, :start_date_time)
 
-  Ec2Resource = PipelineObject.new(:action_on_task_failure, :instance_type, :security_group_ids, :subnet_id, :terminate_after)
+  Ec2Resource = PipelineObject.new(:action_on_task_failure, :instance_type, :security_group_ids, :subnet_id, :terminate_after) do
+    def copy_activity(params)
+      pipeline.append_object CopyActivity.build(params.merge(runs_on: self))
+    end
+
+    def shell_command_activity(params)
+      pipeline.append_object ShellCommandActivity.build(params.merge(runs_on: self))
+    end
+  end
+
   S3DataNode = PipelineObject.new(:directory_path, :data_format, :file_path)
   CsvDataFormat = PipelineObject.new(:column) do
     def type
@@ -68,7 +77,12 @@ module AwDatapipe
   end
   ShellCommandActivity = PipelineObject.new(:input, :output, :runs_on, :command, :script_argument, :script_uri, :stage)
 
-  JdbcDatabase = PipelineObject.new(:_password, :connection_string, :jdbc_driver_class, :username)
+  JdbcDatabase = PipelineObject.new(:_password, :connection_string, :jdbc_driver_class, :username) do
+    def sql_data_node(params)
+      pipeline.append_object SqlDataNode.build(params.merge(database: self))
+    end
+  end
+
   SqlDataNode = PipelineObject.new(:database, :select_query, :table)
   CopyActivity = PipelineObject.new(:input, :output, :runs_on)
 

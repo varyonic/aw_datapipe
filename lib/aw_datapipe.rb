@@ -1,6 +1,6 @@
 require 'active_support/core_ext/module/delegation'
 require 'active_support/inflector' # String#underscore
-require 'aws-sdk'
+require 'aws-sdk-datapipeline'
 
 require 'aw_datapipe/parameter_metadata'
 require 'aw_datapipe/pipeline'

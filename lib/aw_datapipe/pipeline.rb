@@ -9,14 +9,27 @@ module AwDatapipe
 
     # objects [Array]
     def initialize(objects, parameter_metadata, parameter_values)
-      objects.each { |object| object.pipeline = self }
-      @objects ||= ObjectHash.new(*objects)
+      @objects = ObjectHash.new
+      append_objects_with_dependencies(objects)
       @parameter_metadata, @parameter_values = parameter_metadata, parameter_values
     end
 
     def self.build(config, activities, parameter_metadata, parameter_values)
       objects = [config, *activities].map { |obj| obj.dependencies.append(obj) }.flatten
       new(objects, parameter_metadata, parameter_values)
+    end
+
+    def append_object(object)
+      object.pipeline = self
+      objects[object.id] = object
+    end
+
+    def append_object_with_dependencies(object)
+      [*object.dependencies, object].each(&method(:append_object))
+    end
+
+    def append_objects_with_dependencies(objects)
+      objects.each(&method(:append_object_with_dependencies))
     end
 
     def configuration

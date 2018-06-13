@@ -12,11 +12,13 @@ module AwDatapipe
       @objects = ObjectHash.new
       append_objects_with_dependencies(objects)
       @parameter_metadata, @parameter_values = parameter_metadata, parameter_values
+      yield(self) if block_given?
     end
 
     def self.build(config, activities, parameter_metadata, parameter_values)
-      objects = [config, *activities].map { |obj| obj.dependencies.append(obj) }.flatten
-      new(objects, parameter_metadata, parameter_values)
+      new([config], parameter_metadata, parameter_values) do |pipeline|
+        pipeline.append_objects_with_dependencies(activities)
+      end
     end
 
     def append_object(object)
@@ -30,6 +32,7 @@ module AwDatapipe
 
     def append_objects_with_dependencies(objects)
       objects.each(&method(:append_object_with_dependencies))
+      self
     end
 
     def configuration

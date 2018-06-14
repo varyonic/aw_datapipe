@@ -45,8 +45,18 @@ module AwDatapipe
       append_object CsvDataFormat.build(params)
     end
 
+    # @param [Hash] params Various required and optional parameters.
+    # @option params [String] :name (default: 'Ec2Instance')
+    # @option params [String] :instance_type (default: 't1.micro')
+    # @option params [String] :subnet_id
+    # @option params [String] :security_group_ids
+    # @option params [String] :action_on_task_failure (default: 'terminate')
+    # @option params [String] :terminate_after (default: '2 Hours')
+    # 
+    # @return [Ec2Resource]
     def ec2_resource(params)
-      append_object Ec2Resource.build(params)
+      append_object Ec2Resource.build(
+        params.reverse_merge(name: 'Ec2Instance', instance_type: 't1.micro', action_on_task_failure: 'terminate', terminate_after: '2 Hours'))
     end
 
     def jdbc_database(params)

@@ -4,13 +4,18 @@
 - Updating.
   - http://stackoverflow.com/questions/31188739/how-to-automate-the-updating-editing-of-amazon-data-pipeline
   - http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-manage-pipeline-modify-console.html
-- Add DSL using clean room.
 - Add Thor based utility instead of console for downloads.
 - Generate separate SQL script files.
 - Codecov.
 - CodeClimate.
 - Rubydocs.
 - AWS labs examples converted to DSL.
+
+## 0.3.0 - 2018-06-14
+- Use AWS SDK v3.
+- Separate appending activities from initializing pipeline with config.
+- Add helper methods to provide a more hierarchical builder API.
+- Provide default settings for a pipeline EC2 resource.
 
 ## 0.2.4 - 2017-05-24
 - Add ShellCommandActivity optional parameters.

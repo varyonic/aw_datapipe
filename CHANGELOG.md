@@ -11,6 +11,9 @@
 - Rubydocs.
 - AWS labs examples converted to DSL.
 
+## 0.3.1 - 2018-06-20
+- Add tests and fix Pipeline#ec2_resource.
+
 ## 0.3.0 - 2018-06-14
 - Use AWS SDK v3.
 - Separate appending activities from initializing pipeline with config.

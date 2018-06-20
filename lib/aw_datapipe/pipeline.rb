@@ -56,7 +56,7 @@ module AwDatapipe
     # @return [Ec2Resource]
     def ec2_resource(params)
       append_object Ec2Resource.build(
-        params.reverse_merge(name: 'Ec2Instance', instance_type: 't1.micro', action_on_task_failure: 'terminate', terminate_after: '2 Hours'))
+        { name: 'Ec2Instance', instance_type: 't1.micro', action_on_task_failure: 'terminate', terminate_after: '2 Hours' }.merge(params))
     end
 
     def jdbc_database(params)

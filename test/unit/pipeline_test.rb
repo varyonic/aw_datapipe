@@ -18,5 +18,18 @@ describe AwDatapipe::Pipeline do
 
       assert pipeline.objects.keys == [:default, :database, :sql_query, :s3_path, :run_host, :activity], pipeline.objects.keys.inspect
     end
+
+    it 'supports block syntax' do
+      pipeline = AwDatapipe::Pipeline.new([config], parameter_metadata, parameter_values) do |pl|
+        database = pl.jdbc_database(id: :database)
+        sql_query = database.sql_data_node(id: :sql_query, table: 'Y', select_query: '*')
+        s3_path = pl.s3_data_node(id: :s3_path, name: 'S3', directory_path: '/tmp')
+        run_host = pl.ec2_resource(id: :run_host)
+
+        run_host.copy_activity(id: :activity, input: sql_query, output: s3_path)
+      end
+
+      assert pipeline.objects.keys == [:default, :database, :sql_query, :s3_path, :run_host, :activity], pipeline.objects.keys.inspect
+    end
   end
 end

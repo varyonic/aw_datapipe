@@ -1,5 +1,5 @@
 module AwDatapipe
-  class PipelineObject < Struct
+  class PipelineObject
     attr_reader :id
     attr_accessor :name
     attr_accessor :pipeline
@@ -28,8 +28,13 @@ module AwDatapipe
       "#<#{type} #{to_hash}>"
     end
 
+    # @return [Array of Symbol] Attribute names for subtype.
+    def members
+      instance_variables.map { |iv| iv.to_s[1..-1].to_sym } - %i(id name pipeline)
+    end
+
     def to_hash
-      Hash[each_pair.select { |k, v| v != nil }].merge(id: id, name: name)
+      members.each_with_object(id: id, name: name) { |k, h| h[k] = send(k) }
     end
 
     def source(indent_level = 1)
@@ -56,38 +61,24 @@ module AwDatapipe
     end
   end
 
-  Configuration = PipelineObject.new(:failure_and_rerun_mode, :pipeline_log_uri, :resource_role, :role, :schedule, :schedule_type)
-  Schedule = PipelineObject.new(:period, :start_date_time)
-
-  Ec2Resource = PipelineObject.new(:action_on_task_failure, :instance_type, :security_group_ids, :subnet_id, :terminate_after) do
-    def copy_activity(params)
-      pipeline.append_object CopyActivity.build(params.merge(runs_on: self))
-    end
-
-    def shell_command_activity(params)
-      pipeline.append_object ShellCommandActivity.build(params.merge(runs_on: self))
-    end
+  class Configuration < PipelineObject
+    attr_accessor :failure_and_rerun_mode, :pipeline_log_uri, :resource_role, :role, :schedule, :schedule_type
   end
 
-  S3DataNode = PipelineObject.new(:directory_path, :data_format, :file_path)
-  CsvDataFormat = PipelineObject.new(:column) do
+  class Schedule < PipelineObject
+    attr_accessor :period, :start_date_time
+  end
+
+  class S3DataNode < PipelineObject
+    attr_accessor :directory_path, :data_format, :file_path
+  end
+
+  class CsvDataFormat < PipelineObject
+    attr_accessor :column
+
     def type
       'CSV'
     end
   end
-  ShellCommandActivity = PipelineObject.new(:input, :output, :runs_on, :command, :script_argument, :script_uri, :stage)
-
-  JdbcDatabase = PipelineObject.new(:_password, :connection_string, :jdbc_driver_class, :username) do
-    def sql_data_node(params)
-      pipeline.append_object SqlDataNode.build(params.merge(database: self))
-    end
-  end
-
-  SqlDataNode = PipelineObject.new(:database, :select_query, :table)
-  CopyActivity = PipelineObject.new(:input, :output, :runs_on)
-
-  RedshiftDatabase = PipelineObject.new(:_password, :connection_string, :database_name, :username)
-  RedshiftDataNode = PipelineObject.new(:create_table_sql, :database, :primary_keys, :schema_name, :table_name)
-  RedshiftCopyActivity = PipelineObject.new(:input, :insert_mode, :output, :runs_on)
 
 end
